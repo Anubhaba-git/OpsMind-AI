@@ -90,31 +90,31 @@ export default function Home() {
 
   return (
     <div className="relative h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0"
-      />
+      <canvas ref={canvasRef} className="absolute inset-0" />
 
-      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center">
-        <h1 className="text-5xl font-bold mb-4 drop-shadow-xl">
+      <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
+        {/* Title */}
+        <h1 className="text-7xl md:text-8xl font-extrabold mb-6 tracking-wide bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400 bg-clip-text text-transparent drop-shadow-[0_0_25px_rgba(99,102,241,0.6)]">
           OpsMind AI
         </h1>
 
-        <p className="mb-8 text-lg opacity-80">
+        {/* Subtitle */}
+        <p className="mb-10 text-xl md:text-2xl opacity-80 tracking-wider">
           Enterprise SOP Intelligence System
         </p>
 
-        <div className="flex gap-4">
+        {/* Buttons */}
+        <div className="flex gap-6">
           <button
             onClick={() => navigate("/login")}
-            className="px-6 py-2 bg-white/90 text-indigo-700 rounded-lg font-semibold hover:scale-105 transition"
+            className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl font-semibold text-white shadow-lg hover:scale-110 hover:shadow-indigo-500/40 transition duration-300"
           >
             Login
           </button>
 
           <button
             onClick={() => navigate("/register")}
-            className="px-6 py-2 border border-white/70 rounded-lg hover:bg-white/10 transition"
+            className="px-8 py-3 border border-white/60 rounded-xl font-semibold hover:bg-white/10 hover:scale-110 transition duration-300"
           >
             Register
           </button>
@@ -123,5 +123,3 @@ export default function Home() {
     </div>
   );
 }
-
-//
