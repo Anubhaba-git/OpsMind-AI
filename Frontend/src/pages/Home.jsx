@@ -109,7 +109,7 @@ export default function Home() {
             onClick={() => navigate("/login")}
             className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl font-semibold text-white shadow-lg hover:scale-110 hover:shadow-indigo-500/40 transition duration-300"
           >
-            Login
+            Login 
           </button>
 
           <button
