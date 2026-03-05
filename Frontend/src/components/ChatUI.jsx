@@ -19,6 +19,7 @@ export default function ChatUI({ onNewChat }) {
 
     setQuestion("");
     setLoading(true);
+    
 
     try {
       const res = await axios.post(
