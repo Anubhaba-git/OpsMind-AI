@@ -90,7 +90,7 @@ export default function Home() {
 
   return (
     <div className="relative h-screen overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 text-white">
-      <canvas ref={canvasRef} className="absolute inset-0" />
+      <canvas ref={canvasRef} className="absolute inset-0" /> 
 
       <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-4">
         {/* Title */}
