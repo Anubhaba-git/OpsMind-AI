@@ -17,7 +17,7 @@ const MONGO_URI = process.env.MONGO_URI;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const PORT = 8000;
 
-// expose Gemini key to services
+// expose Gemini key to services 
 process.env.GEMINI_API_KEY = GEMINI_API_KEY;
 
 console.log("MONGO_URI:", MONGO_URI);
