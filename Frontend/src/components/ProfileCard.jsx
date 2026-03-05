@@ -7,7 +7,7 @@ export default function ProfileCard({ user }) {
         <p><span className="text-white/50">Name:</span> {user.name}</p>
         <p><span className="text-white/50">Email:</span> {user.email}</p>
         <p>
-          <span className="text-white/50">Joined:</span>{" "}
+          <span className="text-white/50">Joined:</span>{" "} 
           {new Date(user.createdAt).toLocaleDateString()} 
         </p>
       </div>
