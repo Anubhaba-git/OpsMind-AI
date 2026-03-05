@@ -32,7 +32,7 @@ export default function Dashboard() {
       .finally(() => setLoadingStats(false));
   }, []);
 
-  // 🔥 Called after each successful chat
+  //  Called after each successful chat
   const handleNewChat = (question, answer) => {
     setHistory((prev) => [
       {
@@ -43,14 +43,12 @@ export default function Dashboard() {
       },
       ...prev,
     ]);
-
-    // 📈 refresh stats live
+    //  refresh stats live
     getStats().then(setStats);
   };
 
   return (
     <div className="h-screen flex bg-slate-950 text-white">
-
       {/* ================= SIDEBAR ================= */}
       <aside className="w-64 bg-slate-900 border-r border-white/10 p-5 flex flex-col">
         <h2 className="text-xl font-bold mb-2">OpsMind AI</h2>
@@ -77,7 +75,6 @@ export default function Dashboard() {
 
       {/* ================= MAIN ================= */}
       <main className="flex-1 p-6 overflow-auto">
-
         {/* ===== Welcome ===== */}
         {loadingUser ? (
           <div className="mb-6 animate-pulse">
