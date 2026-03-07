@@ -39,7 +39,7 @@ export default function ChatUI({ onNewChat }) {
         { role: "ai", text: answer },
       ]);
 
-      // 🔥 Notify Dashboard for history + stats
+      // Notify Dashboard for history + stats
       onNewChat?.(currentQuestion, answer);
     } catch (err) {
       setMessages((prev) => [
