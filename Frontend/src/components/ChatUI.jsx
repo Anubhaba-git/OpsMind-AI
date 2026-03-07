@@ -9,7 +9,7 @@ export default function ChatUI({ onNewChat }) {
   const ask = async () => {
     if (!question.trim() || loading) return;
 
-    const currentQuestion =  question;
+    const currentQuestion =  question; 
 
     // Add user message immediately 
     setMessages((prev) => [
