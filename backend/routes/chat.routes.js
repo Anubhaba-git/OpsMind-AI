@@ -4,7 +4,7 @@ import { askQuestion } from "../services/rag.service.js";
 const router = express.Router();
 
 router.post("/ask", async (req, res) => {
-  try {
+  try { 
     const { question } = req.body;
     const result = await askQuestion(question);
     res.json(result);
