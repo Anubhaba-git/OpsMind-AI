@@ -23,6 +23,7 @@ router.post("/register", async (req, res) => {
   res.json({ message: "User registered successfully" });
 });
 
+
 /* ================= LOGIN ================= */
 router.post("/login", async (req, res) => {
   const email = req.body.email.toLowerCase().trim();
