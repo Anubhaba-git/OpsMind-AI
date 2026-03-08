@@ -6,7 +6,7 @@ import { cosineSimilarity } from "../utils/cosine.js";
 const OLLAMA_URL = "http://localhost:11434";
 const LLM_MODEL = "phi3:mini";
 
-export async function askQuestion(question) {
+export async function askQuestion(question) { 
   // 1) Embed the question
   const qEmbedding = await generateEmbedding(question);
 
