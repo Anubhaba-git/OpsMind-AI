@@ -10,6 +10,6 @@ export async function generateEmbedding(text) {
     model: "nomic-embed-text",
     prompt: text
   });
-
+ 
   return response.data.embedding;
 }
