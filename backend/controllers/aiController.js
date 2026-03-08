@@ -7,4 +7,4 @@ export const aiSearch = async (req, res) => {
   const response = result.response.text();
 
   res.json({ answer: response });
-};
+}; 
