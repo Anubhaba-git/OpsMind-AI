@@ -5,6 +5,11 @@ import History from "../components/History";
 import { getStats } from "../services/stats";
 import { getProfile } from "../services/profile";
 
+import { MdDashboard } from "react-icons/md";
+import { BsChatDots } from "react-icons/bs";
+import { FaHistory, FaUserCircle } from "react-icons/fa";
+import { FiLogOut } from "react-icons/fi";
+
 export default function Dashboard() {
   const navigate = useNavigate();
 
@@ -32,7 +37,6 @@ export default function Dashboard() {
       .finally(() => setLoadingStats(false));
   }, []);
 
-  //  Called after each successful chat
   const handleNewChat = (question, answer) => {
     setHistory((prev) => [
       {
@@ -43,7 +47,7 @@ export default function Dashboard() {
       },
       ...prev,
     ]);
-    //  refresh stats live
+
     getStats().then(setStats);
   };
 
@@ -59,23 +63,39 @@ export default function Dashboard() {
           user && <p className="text-sm text-white/60 mb-6">{user.name}</p>
         )}
 
-        <nav className="space-y-4 text-white/80 flex-1">
-          <p className="cursor-pointer hover:text-white">Dashboard</p>
-          <p className="cursor-pointer hover:text-white">Chat</p>
-          <p className="cursor-pointer hover:text-white">History</p>
+        <nav className="space-y-2 text-white/80 flex-1 text-base">
+          <p className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/10 hover:text-white transition">
+            <MdDashboard size={20} />
+            Dashboard
+          </p>
+
+          <p className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/10 hover:text-white transition">
+            <BsChatDots size={18} />
+            Chat
+          </p>
+
+          <p className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/10 hover:text-white transition">
+            <FaHistory size={18} />
+            History
+          </p>
+
+          <p className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-white/10 hover:text-white transition">
+            <FaUserCircle size={20} />
+            Profile
+          </p>
         </nav>
 
         <p
           onClick={logout}
-          className="cursor-pointer text-red-400 hover:text-red-500 mt-6"
+          className="flex items-center gap-2 cursor-pointer text-red-400 hover:text-red-500 mt-6"
         >
+          <FiLogOut />
           Logout
         </p>
       </aside>
 
       {/* ================= MAIN ================= */}
       <main className="flex-1 p-6 overflow-auto">
-        {/* ===== Welcome ===== */}
         {loadingUser ? (
           <div className="mb-6 animate-pulse">
             <div className="h-8 w-64 bg-white/10 rounded mb-2" />
