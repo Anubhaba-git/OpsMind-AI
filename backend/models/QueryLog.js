@@ -7,3 +7,4 @@ const QueryLogSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("QueryLog", QueryLogSchema);
+ 
