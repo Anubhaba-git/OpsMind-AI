@@ -17,15 +17,17 @@ export default function History({ history }) {
           history.map((item, i) => (
             <div
               key={i}
-              className="p-3 rounded-lg bg-white/10 hover:bg-white/20 transition cursor-pointer"
+              className="p-3 rounded-lg bg-white/10 hover:bg-white/20 hover:shadow-md transition cursor-pointer"
               title={item.question}
             >
               <p className="text-sm font-semibold truncate">
                 {item.question}
               </p>
+
               <p className="text-xs text-white/60 mt-1">
-                {new Date(item.time).toLocaleTimeString()}
+                {new Date(item.time).toLocaleString()}
               </p>
+
             </div>
           ))
         )}
