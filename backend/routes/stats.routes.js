@@ -14,8 +14,9 @@ router.get("/", auth, async (req, res) => {
       accuracy: "92%",
     });
   } catch (err) {
-    res.status(500).json({ error: "Stats fetch failed" });
-  }
+  console.error(err);
+  res.status(500).json({ error: "Stats fetch failed" });
+}
 });
 
 export default router;
