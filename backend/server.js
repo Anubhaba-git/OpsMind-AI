@@ -16,7 +16,7 @@ dotenv.config({ path: ".env.local" });
 const MONGO_URI = process.env.MONGO_URI;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 const PORT = 8000;
-
+ 
 // expose Gemini key to services 
 process.env.GEMINI_API_KEY = GEMINI_API_KEY;
 
