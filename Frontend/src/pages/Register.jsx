@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { FiUser, FiMail, FiLock } from "react-icons/fi";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -41,9 +42,7 @@ export default function Register() {
 
       navigate("/login");
     } catch (err) {
-      setError(
-        err.response?.data?.error || "Registration failed"
-      );
+      setError(err.response?.data?.error || "Registration failed");
     } finally {
       setLoading(false);
     }
@@ -63,9 +62,20 @@ export default function Register() {
         transform transition-all duration-700
         ${mounted ? "scale-100 opacity-100" : "scale-95 opacity-0"}`}
       >
+
+        {/* Logo */}
+        <div className="flex justify-center mb-4">
+          <img
+            src="/Icon.jpeg"
+            alt="OpsMind AI"
+            className="w-16 h-16 rounded-xl shadow-lg"
+          />
+        </div>
+
         <h2 className="text-3xl font-bold mb-2 text-center text-white">
           Create Account
         </h2>
+
         <p className="text-center text-sm text-white/70 mb-6">
           Join OpsMind AI
         </p>
@@ -80,51 +90,67 @@ export default function Register() {
         {/* Name */}
         <div className="mb-4">
           <label className="text-sm text-white/70">Full Name</label>
-          <input
-            name="name"
-            className="w-full mt-1 px-4 py-2 rounded-lg bg-white/20 text-white
-                       placeholder-white/60 outline-none
-                       focus:ring-2 focus:ring-indigo-400 transition"
-            placeholder="Your name"
-            value={form.name}
-            onChange={change}
-          />
+
+          <div className="relative mt-1">
+            <FiUser className="absolute left-3 top-3 text-white/60" />
+
+            <input
+              name="name"
+              className="w-full pl-10 py-2 rounded-lg bg-white/20 text-white
+              placeholder-white/60 outline-none
+              focus:ring-2 focus:ring-indigo-400 transition"
+              placeholder="Your name"
+              value={form.name}
+              onChange={change}
+            />
+          </div>
         </div>
 
         {/* Email */}
         <div className="mb-4">
           <label className="text-sm text-white/70">Email</label>
-          <input
-            name="email"
-            className="w-full mt-1 px-4 py-2 rounded-lg bg-white/20 text-white
-                       placeholder-white/60 outline-none
-                       focus:ring-2 focus:ring-indigo-400 transition"
-            placeholder="you@company.com"
-            value={form.email}
-            onChange={change}
-          />
+
+          <div className="relative mt-1">
+            <FiMail className="absolute left-3 top-3 text-white/60" />
+
+            <input
+              name="email"
+              className="w-full pl-10 py-2 rounded-lg bg-white/20 text-white
+              placeholder-white/60 outline-none
+              focus:ring-2 focus:ring-indigo-400 transition"
+              placeholder="you@company.com"
+              value={form.email}
+              onChange={change}
+            />
+          </div>
         </div>
 
         {/* Password */}
         <div className="mb-6 relative">
           <label className="text-sm text-white/70">Password</label>
-          <input
-            type={show ? "text" : "password"}
-            name="password"
-            className="w-full mt-1 px-4 py-2 rounded-lg bg-white/20 text-white
-                       placeholder-white/60 outline-none
-                       focus:ring-2 focus:ring-indigo-400 transition"
-            placeholder="••••••••"
-            value={form.password}
-            onChange={change}
-          />
-          <button
-            type="button"
-            onClick={() => setShow(!show)}
-            className="absolute right-3 top-9 text-xs text-white/70 hover:text-white transition"
-          >
-            {show ? "Hide" : "Show"}
-          </button>
+
+          <div className="relative mt-1">
+            <FiLock className="absolute left-3 top-3 text-white/60" />
+
+            <input
+              type={show ? "text" : "password"}
+              name="password"
+              className="w-full pl-10 py-2 rounded-lg bg-white/20 text-white
+              placeholder-white/60 outline-none
+              focus:ring-2 focus:ring-indigo-400 transition"
+              placeholder="••••••••"
+              value={form.password}
+              onChange={change}
+            />
+
+            <button
+              type="button"
+              onClick={() => setShow(!show)}
+              className="absolute right-3 top-3 text-xs text-white/70 hover:text-white transition"
+            >
+              {show ? "Hide" : "Show"}
+            </button>
+          </div>
         </div>
 
         {/* Button */}
@@ -132,9 +158,10 @@ export default function Register() {
           onClick={register}
           disabled={loading}
           className={`w-full py-3 rounded-lg font-semibold tracking-wide transition
-          ${loading
-            ? "bg-indigo-400 cursor-not-allowed"
-            : "bg-indigo-500 hover:bg-indigo-600 active:scale-95"
+          ${
+            loading
+              ? "bg-indigo-400 cursor-not-allowed"
+              : "bg-indigo-500 hover:bg-indigo-600 active:scale-95"
           }`}
         >
           {loading ? "Creating account..." : "Create Account"}
@@ -150,6 +177,7 @@ export default function Register() {
             Login
           </span>
         </p>
+
       </div>
     </div>
   );
