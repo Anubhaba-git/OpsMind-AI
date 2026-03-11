@@ -9,7 +9,7 @@ import Chunk from "../models/Chunk.js";
 const require = createRequire(import.meta.url);
 const PDFParser = require("pdf2json");
 
-const router = express.Router(); 
+const router = express.Router();
 
 /* ============================
    Multer Storage Configuration
@@ -38,56 +38,85 @@ router.post("/pdf", upload.single("file"), async (req, res) => {
     const filePath = path.resolve(req.file.path);
     const pdfParser = new PDFParser();
 
-    // ❌ PDF parse error
+    /* ============================
+       PDF PARSE ERROR
+    ============================ */
     pdfParser.on("pdfParser_dataError", (err) => {
       console.error("PDF PARSE ERROR:", err);
+
       return res.status(500).json({
         error: "PDF processing failed",
         details: err.parserError,
       });
     });
 
-    // ✅ PDF parsed successfully
+    /* ============================
+       PDF PARSED SUCCESSFULLY
+    ============================ */
     pdfParser.on("pdfParser_dataReady", async (pdfData) => {
-      const chunks = [];
+      try {
+        const chunks = [];
 
-      pdfData.Pages.forEach((page, pageIndex) => {
-        let pageText = "";
+        pdfData.Pages.forEach((page, pageIndex) => {
+          let pageText = "";
 
-        page.Texts.forEach((t) => {
-          pageText += decodeURIComponent(t.R[0].T) + " ";
-        });
+          page.Texts.forEach((t) => {
+            pageText += decodeURIComponent(t.R[0].T) + " ";
+          });
 
-        // chunk per page (40 words per chunk)
-        const pageChunks = chunkText(pageText, 40);
+          // split page text into chunks
+          const pageChunks = chunkText(pageText, 40);
 
-        pageChunks.forEach((chunk) => {
-          chunks.push({
-            filename: req.file.filename,
-            text: chunk.trim(),
-            page: pageIndex + 1,
+          pageChunks.forEach((chunk) => {
+            const cleanChunk = chunk.trim();
+
+            // ⭐ skip empty chunks
+            if (!cleanChunk) return;
+
+            chunks.push({
+              filename: req.file.filename,
+              text: cleanChunk,
+              page: pageIndex + 1,
+            });
           });
         });
-      });
 
-      // 🔥 MongoDB: remove old chunks of same file
-      await Chunk.deleteMany({ filename: req.file.filename });
+        // ⭐ extra safety filter
+        const validChunks = chunks.filter(
+          (c) => c.text && c.text.trim().length > 0
+        );
 
-      // 🔥 MongoDB: store new chunks
-      await Chunk.insertMany(chunks);
+        // remove old chunks of same file
+        await Chunk.deleteMany({ filename: req.file.filename });
 
-      return res.json({
-        message: "PDF uploaded, chunked & stored successfully",
-        filename: req.file.filename,
-        totalPages: pdfData.Pages.length,
-        totalChunks: chunks.length,
-      });
+        // store chunks
+        await Chunk.insertMany(validChunks);
+
+        return res.json({
+          message: "PDF uploaded, chunked & stored successfully",
+          filename: req.file.filename,
+          totalPages: pdfData.Pages.length,
+          totalChunks: validChunks.length,
+        });
+
+      } catch (dbError) {
+        console.error("CHUNK SAVE ERROR:", dbError);
+
+        return res.status(500).json({
+          error: "Failed to store PDF chunks",
+          details: dbError.message,
+        });
+      }
     });
 
-    // start parsing PDF
+    /* ============================
+       Start PDF Parsing
+    ============================ */
     pdfParser.loadPDF(filePath);
+
   } catch (error) {
     console.error("UPLOAD ERROR:", error);
+
     res.status(500).json({
       error: "PDF upload failed",
       details: error.message,

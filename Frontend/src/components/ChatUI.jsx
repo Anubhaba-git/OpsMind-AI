@@ -5,13 +5,13 @@ export default function ChatUI({ onNewChat }) {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   const ask = async () => {
     if (!question.trim() || loading) return;
 
-    const currentQuestion =  question; 
+    const currentQuestion = question;
 
-    // Add user message immediately 
     setMessages((prev) => [
       ...prev,
       { role: "user", text: currentQuestion },
@@ -33,13 +33,11 @@ export default function ChatUI({ onNewChat }) {
 
       const answer = res.data.answer;
 
-      // Add AI response
       setMessages((prev) => [
         ...prev,
         { role: "ai", text: answer },
       ]);
 
-      //  Notify Dashboard for history + stats
       onNewChat?.(currentQuestion, answer);
     } catch (err) {
       setMessages((prev) => [
@@ -54,6 +52,48 @@ export default function ChatUI({ onNewChat }) {
     }
   };
 
+  const uploadPDF = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setUploading(true);
+
+    try {
+      await axios.post(
+        "http://localhost:8000/api/upload/pdf",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", text: `✅ ${file.name} uploaded successfully.` },
+      ]);
+
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.error || "⚠️ PDF upload failed.";
+
+      setMessages((prev) => [
+        ...prev,
+        { role: "ai", text: errorMessage },
+      ]);
+    } finally {
+      setUploading(false);
+
+      // ⭐ Important fix
+      e.target.value = "";
+    }
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === "Enter") ask();
   };
@@ -62,8 +102,18 @@ export default function ChatUI({ onNewChat }) {
     <div className="h-full flex flex-col bg-white/5 border border-white/10 rounded-xl">
 
       {/* Header */}
-      <div className="px-4 py-3 border-b border-white/10 font-semibold">
+      <div className="px-4 py-3 border-b border-white/10 font-semibold flex justify-between items-center">
         AI Chat Assistant
+
+        <label className="cursor-pointer text-xs bg-indigo-600 px-3 py-1 rounded hover:bg-indigo-700">
+          Upload SOP
+          <input
+            type="file"
+            accept="application/pdf"
+            className="hidden"
+            onChange={uploadPDF}
+          />
+        </label>
       </div>
 
       {/* Messages */}
@@ -81,13 +131,18 @@ export default function ChatUI({ onNewChat }) {
           </div>
         ))}
 
-        {/* 🔵 AI Typing Indicator */}
         {loading && (
           <div className="flex items-center gap-2 text-white/60">
             <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce" />
             <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce delay-100" />
             <span className="w-2 h-2 bg-indigo-400 rounded-full animate-bounce delay-200" />
             <span className="text-xs ml-2">AI is thinking...</span>
+          </div>
+        )}
+
+        {uploading && (
+          <div className="text-xs text-white/60">
+            Uploading PDF...
           </div>
         )}
       </div>
@@ -101,6 +156,7 @@ export default function ChatUI({ onNewChat }) {
           placeholder="Ask SOP-related question..."
           className="flex-1 px-3 py-2 rounded bg-black/30 outline-none text-sm"
         />
+
         <button
           onClick={ask}
           disabled={loading}
