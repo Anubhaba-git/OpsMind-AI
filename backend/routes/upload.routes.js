@@ -5,6 +5,7 @@ import fs from "fs";
 import { createRequire } from "module";
 import { chunkText } from "../utils/chunker.js";
 import Chunk from "../models/Chunk.js";
+import { generateEmbedding } from "../services/embedding.service.js";
 
 const require = createRequire(import.meta.url);
 const PDFParser = require("pdf2json");
@@ -57,7 +58,7 @@ router.post("/pdf", upload.single("file"), async (req, res) => {
       try {
         const chunks = [];
 
-        pdfData.Pages.forEach((page, pageIndex) => {
+        for (const [pageIndex, page] of pdfData.Pages.entries()) {
           let pageText = "";
 
           page.Texts.forEach((t) => {
@@ -67,36 +68,35 @@ router.post("/pdf", upload.single("file"), async (req, res) => {
           // split page text into chunks
           const pageChunks = chunkText(pageText, 40);
 
-          pageChunks.forEach((chunk) => {
+          for (const chunk of pageChunks) {
             const cleanChunk = chunk.trim();
 
-            // ⭐ skip empty chunks
-            if (!cleanChunk) return;
+            // skip empty chunks
+            if (!cleanChunk) continue;
+
+            // ⭐ generate embedding for each chunk
+            const embedding = await generateEmbedding(cleanChunk);
 
             chunks.push({
               filename: req.file.filename,
               text: cleanChunk,
               page: pageIndex + 1,
+              embedding,
             });
-          });
-        });
-
-        // ⭐ extra safety filter
-        const validChunks = chunks.filter(
-          (c) => c.text && c.text.trim().length > 0
-        );
+          }
+        }
 
         // remove old chunks of same file
         await Chunk.deleteMany({ filename: req.file.filename });
 
-        // store chunks
-        await Chunk.insertMany(validChunks);
+        // store chunks with embeddings
+        await Chunk.insertMany(chunks);
 
         return res.json({
           message: "PDF uploaded, chunked & stored successfully",
           filename: req.file.filename,
           totalPages: pdfData.Pages.length,
-          totalChunks: validChunks.length,
+          totalChunks: chunks.length,
         });
 
       } catch (dbError) {

@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-const MAX_CONTEXT_CHARS = 1500; // 🔥 critical for phi3:mini
+const MAX_CONTEXT_CHARS = 1500;
 
 function trimContext(text) {
   if (!text) return "";
@@ -36,9 +36,9 @@ Answer:
         prompt,
         stream: false,
         options: {
-          num_ctx: 512,        // 🔥 memory safe
-          num_predict: 120,    // 🔥 short answers
-          temperature: 0.2     // 🔥 factual
+          num_ctx: 512,       
+          num_predict: 120,   
+          temperature: 0.2   
         }
       }),
     }

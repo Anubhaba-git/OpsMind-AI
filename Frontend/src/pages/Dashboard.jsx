@@ -54,7 +54,7 @@ export default function Dashboard() {
   return (
     <div className="h-screen flex bg-slate-950 text-white">
       {/* ================= SIDEBAR ================= */}
-      <aside className="w-64 bg-slate-900 border-r border-white/10 p-5 flex flex-col">
+      <aside className="w-64 bg-slate-900 border-r border-white/15 p-5 flex flex-col">
         <h2 className="text-xl font-bold mb-2">OpsMind AI</h2>
 
         {loadingUser ? (
